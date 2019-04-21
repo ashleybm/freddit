@@ -40,5 +40,5 @@ dependencies {
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 
     //Card View
-    implementation 'androidx.cardview:cardview:1.0.0-alpha3'
+    implementation 'androidx.cardview:cardview:1.0.0'
 }

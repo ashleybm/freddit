@@ -7,6 +7,8 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.List;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -20,6 +22,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
+
+import ashleybaker.freddit_v1.model.entry.Entry;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,8 +53,15 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<Feed>() {
             @Override
             public void onResponse(Call<Feed> call, Response<Feed> response) {
-                Log.e(TAG, "onResponse: feed: " + response.body().toString());
+                //Log.d(TAG, "onResponse: feed: " + response.body().toString());
                 Log.e(TAG, "onResponse: Server Response: " + response.toString());
+
+                List<Entry> entrys = response.body().getEntrys();
+                Log.d(TAG, "onResponse: entrys: " + response.body().getEntrys());
+
+                Log.d(TAG, "onResponse: author: " + entrys.get(0).getAuthor());
+                Log.d(TAG, "onResponse: updated: " + entrys.get(0).getUpdated());
+                Log.d(TAG, "onResponse: title: " + entrys.get(0).getTitle());
             }
 
             @Override

@@ -93,7 +93,7 @@ public class Feed implements Serializable {
     @NonNull
     @Override
     public String toString() {
-        return "Feed: \n [Entries: " + entrys + "]";
+        return "Feed: \n [Entries: \n" + entrys + "]";
     }
 
 }

@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -46,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
 
@@ -53,18 +53,7 @@ public class MainActivity extends AppCompatActivity {
             setTheme(R.style.AppTheme_Dark_NoActionBar);
         }
 
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Switch toggle = (Switch) findViewById(R.id.switch1);
-
-        toggle.setChecked(useDarkTheme);
-        toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                toggleTheme(isChecked);
-            }
-        });
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(URL)
@@ -135,17 +124,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        private void toggleTheme(boolean darkTheme) {
-            SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
-            editor.putBoolean(PREF_DARK_THEME, darkTheme);
-            editor.apply();
-
-            Intent intent = getIntent();
-            finish();
-
-            startActivity(intent);
-        }
-
         fragmentManager = getSupportFragmentManager();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -192,10 +170,12 @@ public class MainActivity extends AppCompatActivity {
         activeFragment = fragment;
     }
 
-    private void toggleTheme(boolean darkTheme) {
-        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
-        editor.putBoolean(PREF_DARK_THEME, darkTheme);
-        editor.apply();
+    /**
+     * Switches theme to dark if preference is set. Will restart application
+     * @param darkTheme Use dark theme
+     */
+    public void toggleTheme(boolean darkTheme) {
+        Toast.makeText(this, "App restarting to apply theme", Toast.LENGTH_LONG).show();
 
         Intent intent = getIntent();
         finish();

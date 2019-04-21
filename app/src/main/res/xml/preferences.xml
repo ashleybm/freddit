@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <SwitchPreferenceCompat
-        app:key="show_nsfw"
-        app:title="Show NSFW content"
+        app:key="dark_theme"
+        app:title="@string/use_dark_theme"
         app:defaultValue="False"/>
 
 </PreferenceScreen>

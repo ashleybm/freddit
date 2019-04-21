@@ -13,7 +13,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AddFragmentToBackStack {
 
     private DrawerLayout drawerLayout;
 
@@ -81,5 +81,18 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Show the given fragment, adding it to the back stack
+     * @param fragment The fragment we want to show
+     */
+    @Override
+    public void addFragmentToBackStack(Fragment fragment) {
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragmentHolder, fragment)
+                .addToBackStack(null)
+                .commit();
+        activeFragment = fragment;
     }
 }

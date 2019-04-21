@@ -1,5 +1,6 @@
 package ashleybaker.freddit_v1;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import ashleybaker.freddit_v1.model.Feed;
 import ashleybaker.freddit_v1.model.entry.Entry;
@@ -30,6 +32,8 @@ public class RSSFeedFragment extends Fragment implements ListView.OnItemClickLis
     private static final String TAG = "RSSFeedFragment";
 
     private static final String URL = "https://www.reddit.com/r/";
+
+    private AddFragmentToBackStack parentActivity;
 
     /**
      * The 'constructor' for the fragment, sets up important stuff
@@ -132,6 +136,16 @@ public class RSSFeedFragment extends Fragment implements ListView.OnItemClickLis
         return view;
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof AddFragmentToBackStack) {
+            parentActivity = (AddFragmentToBackStack) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + "  must implement AddFragmentToBackStack");
+        }
+    }
 
     /**
      * Do things when the user clicks on something in the list
@@ -143,5 +157,7 @@ public class RSSFeedFragment extends Fragment implements ListView.OnItemClickLis
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Toast.makeText(getActivity(), "You touched " + position, Toast.LENGTH_SHORT).show();
+
+        // TODO: create new PostFragment and add to back stack
     }
 }

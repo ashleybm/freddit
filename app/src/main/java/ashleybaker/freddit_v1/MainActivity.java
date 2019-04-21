@@ -1,7 +1,9 @@
 package ashleybaker.freddit_v1;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -12,8 +14,18 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import ashleybaker.freddit_v1.model.Feed;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "MainActivity";
+
+    private static final String URL = "https://www.reddit.com/r/";
 
     private DrawerLayout drawerLayout;
 
@@ -24,6 +36,30 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(URL)
+                .addConverterFactory(SimpleXmlConverterFactory.create())
+                .build();
+
+        RedditAPI redditAPI = retrofit.create(RedditAPI.class);
+
+        Call<Feed> call = redditAPI.getFeed();
+
+        call.enqueue(new Callback<Feed>() {
+            @Override
+            public void onResponse(Call<Feed> call, Response<Feed> response) {
+                Log.e(TAG, "onResponse: feed: " + response.body().toString());
+                Log.e(TAG, "onResponse: Server Response: " + response.toString());
+            }
+
+            @Override
+            public void onFailure(Call<Feed> call, Throwable t) {
+                Log.e(TAG, "onFailure: Unable to retrieve RSS: " + t.getMessage());
+                Toast.makeText(MainActivity.this, "An Error Occured", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         fragmentManager = getSupportFragmentManager();
 

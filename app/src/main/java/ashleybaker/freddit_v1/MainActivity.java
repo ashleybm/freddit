@@ -3,6 +3,7 @@ package ashleybaker.freddit_v1;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -66,13 +67,13 @@ public class MainActivity extends AppCompatActivity {
 
                 ArrayList<Post> posts = new ArrayList<Post>();
                 for(int i = 0; i < entrys.size(); i++){
-                    ExtractXML extractXML_ahref = new ExtractXML(entrys.get(0).getContent(), "<a href=");
+                    ExtractXML extractXML_ahref = new ExtractXML(entrys.get(i).getContent(), "<a href=");
                     List<String> postContent = extractXML_ahref.start();
 
-                    ExtractXML extractXML_imgsrc = new ExtractXML(entrys.get(0).getContent(), "<img src=\"");
+                    ExtractXML extractXML_imgsrc = new ExtractXML(entrys.get(i).getContent(), "<img src=");
 
                     try{
-                        postContent.add(extractXML_imgsrc.findThumbNail());
+                        postContent.add(extractXML_imgsrc.start().get(0));
                     }
                     catch(NullPointerException e){
                         postContent.add(null);
@@ -93,14 +94,18 @@ public class MainActivity extends AppCompatActivity {
                             )
                     );
 
-                    for(int j = 0; j < posts.size(); j++){
-                        Log.d(TAG, "onResponse: \n " +
-                                "PostURL: " + posts.get(j).getPostURL() + "\n " +
-                                "ThumbnailURL: " +  posts.get(j).getThumbnailURL() + "\n " +
-                                "Title: " + posts.get(j).getTitle() + "\n " +
-                                "Author: " + posts.get(j).getAuthor() + "\n " +
-                                "updated: " + posts.get(j).getDate_updated() + "\n ");
-                    }
+                    //for(int j = 0; j < posts.size(); j++){
+                      //  Log.d(TAG, "onResponse: \n " +
+                        //        "PostURL: " + posts.get(j).getPostURL() + "\n " +
+                          //      "ThumbnailURL: " +  posts.get(j).getThumbnailURL() + "\n " +
+                            //    "Title: " + posts.get(j).getTitle() + "\n " +
+                              //  "Author: " + posts.get(j).getAuthor() + "\n " +
+                                //"updated: " + posts.get(j).getDate_updated() + "\n ");
+                    //}
+
+                    ListView listView = (ListView) findViewById(R.id.listView);
+                    CustomListAdapter customListAdapter = new CustomListAdapter(MainActivity.this, R.layout.card_layout_main, posts);
+                    listView.setAdapter(customListAdapter);
                 }
             }
 

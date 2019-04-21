@@ -1,8 +1,12 @@
 package ashleybaker.freddit_v1;
 
+import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -37,10 +41,30 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
     private Fragment activeFragment;
 
+    private static final String PREFS_NAME = "prefs";
+    private static final String PREF_DARK_THEME = "dark_theme";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
+
+        if(useDarkTheme){
+            setTheme(R.style.AppTheme_Dark_NoActionBar);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Switch toggle = (Switch) findViewById(R.id.switch1);
+
+        toggle.setChecked(useDarkTheme);
+        toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                toggleTheme(isChecked);
+            }
+        });
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(URL)
@@ -111,6 +135,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        private void toggleTheme(boolean darkTheme) {
+            SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
+            editor.putBoolean(PREF_DARK_THEME, darkTheme);
+            editor.apply();
+
+            Intent intent = getIntent();
+            finish();
+
+            startActivity(intent);
+        }
 
         fragmentManager = getSupportFragmentManager();
 
@@ -156,6 +190,17 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment = new SettingsFragment();
         fragmentManager.beginTransaction().replace(R.id.fragmentHolder, fragment).commit();
         activeFragment = fragment;
+    }
+
+    private void toggleTheme(boolean darkTheme) {
+        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
+        editor.putBoolean(PREF_DARK_THEME, darkTheme);
+        editor.apply();
+
+        Intent intent = getIntent();
+        finish();
+
+        startActivity(intent);
     }
 
     @Override

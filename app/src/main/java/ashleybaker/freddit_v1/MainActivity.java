@@ -19,6 +19,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.preference.PreferenceManager;
 import ashleybaker.freddit_v1.model.Feed;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,14 +40,13 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
     private Fragment activeFragment;
 
-    private static final String PREFS_NAME = "prefs";
     private static final String PREF_DARK_THEME = "dark_theme";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
 
         if(useDarkTheme){

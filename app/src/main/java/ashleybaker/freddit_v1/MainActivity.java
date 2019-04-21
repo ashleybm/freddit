@@ -69,10 +69,10 @@ public class MainActivity extends AppCompatActivity {
                     ExtractXML extractXML_ahref = new ExtractXML(entrys.get(0).getContent(), "<a href=");
                     List<String> postContent = extractXML_ahref.start();
 
-                    ExtractXML extractXML_imgsrc = new ExtractXML(entrys.get(0).getContent(), "<img href=");
+                    ExtractXML extractXML_imgsrc = new ExtractXML(entrys.get(0).getContent(), "<img src=\"");
 
                     try{
-                        postContent.add(extractXML_imgsrc.start().get(0));
+                        postContent.add(extractXML_imgsrc.findThumbNail());
                     }
                     catch(NullPointerException e){
                         postContent.add(null);

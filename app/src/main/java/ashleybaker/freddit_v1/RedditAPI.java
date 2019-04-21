@@ -8,7 +8,7 @@ public interface RedditAPI {
 
     String URL = "https://www.reddit.com/r/";
 
-    @GET("askreddit/.rss")
+    @GET("earthporn/.rss")
     Call<Feed> getFeed();
 
 }

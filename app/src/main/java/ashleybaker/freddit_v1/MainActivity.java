@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.ActionBar;
@@ -59,9 +60,48 @@ public class MainActivity extends AppCompatActivity {
                 List<Entry> entrys = response.body().getEntrys();
                 Log.d(TAG, "onResponse: entrys: " + response.body().getEntrys());
 
-                Log.d(TAG, "onResponse: author: " + entrys.get(0).getAuthor());
-                Log.d(TAG, "onResponse: updated: " + entrys.get(0).getUpdated());
-                Log.d(TAG, "onResponse: title: " + entrys.get(0).getTitle());
+                //Log.d(TAG, "onResponse: author: " + entrys.get(0).getAuthor());
+                //Log.d(TAG, "onResponse: updated: " + entrys.get(0).getUpdated());
+                //Log.d(TAG, "onResponse: title: " + entrys.get(0).getTitle());
+
+                ArrayList<Post> posts = new ArrayList<Post>();
+                for(int i = 0; i < entrys.size(); i++){
+                    ExtractXML extractXML_ahref = new ExtractXML(entrys.get(0).getContent(), "<a href=");
+                    List<String> postContent = extractXML_ahref.start();
+
+                    ExtractXML extractXML_imgsrc = new ExtractXML(entrys.get(0).getContent(), "<img href=");
+
+                    try{
+                        postContent.add(extractXML_imgsrc.start().get(0));
+                    }
+                    catch(NullPointerException e){
+                        postContent.add(null);
+                        Log.e(TAG, "onResponse: NullPointerException(thumbnail):" + e.getMessage());
+                    }
+                    catch(IndexOutOfBoundsException e){
+                        postContent.add(null);
+                        Log.e(TAG, "onResponse: IndexOutOfBoundsException(thumbnail):" + e.getMessage());
+                    }
+
+                    int lastPosition = postContent.size() - 1;
+                    posts.add(new Post(
+                            entrys.get(i).getTitle(),
+                            entrys.get(i).getAuthor().getName(),
+                            entrys.get(i).getUpdated(),
+                            postContent.get(0),
+                            postContent.get(lastPosition)
+                            )
+                    );
+
+                    for(int j = 0; j < posts.size(); j++){
+                        Log.d(TAG, "onResponse: \n " +
+                                "PostURL: " + posts.get(j).getPostURL() + "\n " +
+                                "ThumbnailURL: " +  posts.get(j).getThumbnailURL() + "\n " +
+                                "Title: " + posts.get(j).getTitle() + "\n " +
+                                "Author: " + posts.get(j).getAuthor() + "\n " +
+                                "updated: " + posts.get(j).getDate_updated() + "\n ");
+                    }
+                }
             }
 
             @Override

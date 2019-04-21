@@ -5,7 +5,7 @@ import org.simpleframework.xml.Root;
 
 import java.io.Serializable;
 
-@Root(name = "feed", strict = false)
+@Root(name = "entry", strict = false)
 public class Entry implements Serializable {
 
     @Element(name = "content")

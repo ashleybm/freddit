@@ -3,6 +3,7 @@ package ashleybaker.freddit_v1;
 import ashleybaker.freddit_v1.model.Feed;
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 
 public interface RedditAPI {
 
@@ -10,5 +11,8 @@ public interface RedditAPI {
 
     @GET("earthporn/.rss")
     Call<Feed> getFeed();
+
+    @GET("comments/{post}/.rss")
+    Call<Post> getPostComments(@Path("post") String post);
 
 }

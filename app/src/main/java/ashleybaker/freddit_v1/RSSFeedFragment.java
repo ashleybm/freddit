@@ -33,6 +33,8 @@ public class RSSFeedFragment extends Fragment implements ListView.OnItemClickLis
 
     private static final String URL = "https://www.reddit.com/r/";
 
+    private ArrayList<Post> posts = new ArrayList<Post>();
+
     private AddFragmentToBackStack parentActivity;
 
     /**
@@ -80,7 +82,7 @@ public class RSSFeedFragment extends Fragment implements ListView.OnItemClickLis
                 //Log.d(TAG, "onResponse: updated: " + entrys.get(0).getUpdated());
                 //Log.d(TAG, "onResponse: title: " + entrys.get(0).getTitle());
 
-                ArrayList<Post> posts = new ArrayList<Post>();
+
                 for(int i = 0; i < entrys.size(); i++){
                     ExtractXML extractXML_ahref = new ExtractXML(entrys.get(i).getContent(), "<a href=");
                     List<String> postContent = extractXML_ahref.start();
@@ -157,7 +159,7 @@ public class RSSFeedFragment extends Fragment implements ListView.OnItemClickLis
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Toast.makeText(getActivity(), "You touched " + position, Toast.LENGTH_SHORT).show();
-        Fragment fragment = CommentsFragment.newInstance();
+        Fragment fragment = CommentsFragment.newInstance(posts.get(position).getPostURL());
         parentActivity.addFragmentToBackStack(fragment);
     }
 }

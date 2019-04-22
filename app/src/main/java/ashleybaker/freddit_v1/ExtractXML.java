@@ -29,7 +29,7 @@ public class ExtractXML {
         String[] splitXML = null;
         String stop = null;
 
-        if(endTag.equals("NONE")){
+        if(endTag == null){
             stop = "\"";
             splitXML = xml.split(tag + stop);
         }

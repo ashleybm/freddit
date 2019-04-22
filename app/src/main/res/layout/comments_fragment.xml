@@ -56,14 +56,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/post_selftext" />
 
-        <TextView
-            android:id="@+id/post_comments"
+        <ListView
+            android:id="@+id/commentsListView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:text="commments" />
+            android:layout_height="match_parent">
+
+        </ListView>
 
 
     </LinearLayout>

@@ -5,13 +5,37 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 /**
  * Shows the details from the post the user selected
  */
 
-public class PostFragment extends Fragment {
+public class CommentsFragment extends Fragment {
+
+    private static final String ARGS = "";
+
+    private String postURL;
+
+
+    /**
+     * Empty constructor for newInstance()
+     */
+    public CommentsFragment() {}
+
+    /**
+     * Create a new CommentFragment from a specific URL
+     * @param postURL
+     * @return
+     */
+    static CommentsFragment newInstance(@NonNull String postURL) {
+        CommentsFragment fragment = new CommentsFragment();
+        Bundle args = new Bundle();
+        args.putString(ARGS, postURL);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     /**
      * The 'constructor' for the fragment, sets up important stuff
@@ -21,7 +45,11 @@ public class PostFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        if(getArguments() != null) {
+            postURL = getArguments().getString(ARGS);
+        } else {
+            postURL = ""; // TODO: Make this a safe default
+        }
     }
 
     /**

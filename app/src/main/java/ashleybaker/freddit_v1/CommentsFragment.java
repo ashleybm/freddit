@@ -5,9 +5,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+
+import android.widget.AdapterView;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -21,6 +23,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
+
+import
 
 /**
  * Shows the details from the post the user selected
@@ -36,6 +40,8 @@ public class CommentsFragment extends Fragment {
     private String currentFeed;
     private String TAG = "CommentsFragment :";
 
+    private List<Comment> comment;
+    private ListView listViewComments;
 
     /**
      * Empty constructor for newInstance()
@@ -68,6 +74,10 @@ public class CommentsFragment extends Fragment {
         } else {
             postURL = ""; // TODO: Make this a safe default
         }
+
+        listViewComments
+        findViewById(R.id.commentsListView);
+
     }
 
     /**
@@ -111,12 +121,37 @@ public class CommentsFragment extends Fragment {
                     Log.d(TAG, "onResponse : entry: " + entrys.get(i).toString() + "\n");
 
                     ExtractXML extractXML = new ExtractXML(entrys.get(i).getContent(), "<div class=\"md\"><p>","</p>");
-                    extractXML.start();
+                    List<String> comments = extractXML.start();
 
-                    //Comment comment = new Comment()
+                    try{
+                        comment.add(new Comment(
+                                comments.get(0),
+                                entrys.get(i).getAuthor().getName(),
+                                entrys.get(i).getUpdated(),
+                                entrys.get(i).getId()
+                        ));
+                    }
+                    catch(IndexOutOfBoundsException e){
+                        comment.add(new Comment(
+                                "Error Reading Content",
+                                "None",
+                                "None",
+                                "None"
+                        ));
+                    }
 
+                    catch(NullPointerException e){
+                        comment.add(new Comment(
+                                comments.get(0),
+                                "None",
+                                entrys.get(i).getUpdated(),
+                                entrys.get(i).getId()
+                        ));
+                    }
 
                 }
+
+                listViewComments = (ListView) findViewById(R.id.commentsListView);
             }
 
             @Override

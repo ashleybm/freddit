@@ -34,6 +34,8 @@ public class Entry implements Serializable {
 
     }
 
+
+
     public String getContent() {
         return content;
     }

@@ -110,6 +110,11 @@ public class CommentsFragment extends Fragment {
                 for(int i = 0; i < entrys.size(); i++){
                     Log.d(TAG, "onResponse : entry: " + entrys.get(i).toString() + "\n");
 
+                    ExtractXML extractXML = new ExtractXML(entrys.get(i).getContent(), "<div class=\"md\"><p>","</p>");
+                    extractXML.start();
+
+                    //Comment comment = new Comment()
+
 
                 }
             }

@@ -11,21 +11,38 @@ public class ExtractXML {
 
     private String tag;
     private String xml;
+    private String endTag;
 
     public ExtractXML(String xml, String tag) {
         this.tag = tag;
         this.xml = xml;
     }
 
+    public ExtractXML(String xml, String tag, String endTag) {
+        this.tag = tag;
+        this.xml = xml;
+        this.endTag = endTag;
+    }
+
     public List<String> start(){
         List<String> result = new ArrayList<>();
+        String[] splitXML = null;
+        String stop = null;
 
-        String[] splitXML = xml.split(tag + "\"");
+        if(endTag.equals("NONE")){
+            stop = "\"";
+            splitXML = xml.split(tag + stop);
+        }
+        else{
+            stop = endTag;
+            splitXML = xml.split(tag + stop);
+        }
+
         int count = splitXML.length;
 
         for(int i = 1; i < count; i++){
             String temp = splitXML[i];
-            int index = temp.indexOf("\"");
+            int index = temp.indexOf(stop);
             Log.d(TAG, "start: index: " + index);
             Log.d(TAG, "start: extracted: " + temp);
 

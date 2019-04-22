@@ -7,4 +7,14 @@
         app:title="@string/use_dark_theme"
         app:defaultValue="False"/>
 
+    <EditTextPreference
+        android:capitalize="words"
+        android:defaultValue="earthporn"
+        android:inputType="textCapWords"
+        android:key="subreddit"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/default_sub" />
+
 </PreferenceScreen>

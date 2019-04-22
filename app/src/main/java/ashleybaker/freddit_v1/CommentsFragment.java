@@ -1,12 +1,26 @@
 package ashleybaker.freddit_v1;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import ashleybaker.freddit_v1.model.Feed;
+import ashleybaker.freddit_v1.model.entry.Author;
+import ashleybaker.freddit_v1.Post;
+import ashleybaker.freddit_v1.model.entry.Entry;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 /**
  * Shows the details from the post the user selected
@@ -18,6 +32,10 @@ public class CommentsFragment extends Fragment {
 
     private String postURL;
 
+    private final String BASE_URL = "https://www.reddit.com/r/";
+    private String currentFeed;
+    private String TAG = "CommentsFragment :";
+
 
     /**
      * Empty constructor for newInstance()
@@ -26,13 +44,13 @@ public class CommentsFragment extends Fragment {
 
     /**
      * Create a new CommentFragment from a specific URL
-     * @param postURL
+     * @param post
      * @return
      */
-    static CommentsFragment newInstance(@NonNull String postURL) {
+    static CommentsFragment newInstance(@NonNull Post post) {
         CommentsFragment fragment = new CommentsFragment();
         Bundle args = new Bundle();
-        args.putString(ARGS, postURL);
+        args.putString(ARGS, post.getPostURL());
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,6 +81,45 @@ public class CommentsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.rss_feed_fragment, container, false);
+
+        try{
+            String[] splitURL = postURL.split(BASE_URL);
+            currentFeed = splitURL[1];
+            Log.d(TAG, "onCreateView: currentFeed: " + currentFeed);
+        }
+        catch(ArrayIndexOutOfBoundsException e){
+            //CATCHES POSTS THAT IT CAN'T ACCESS
+            Log.e(TAG, "onCreateView: ArrayIndexOutOfBoundsException: " + e.getMessage());
+        }
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(SimpleXmlConverterFactory.create())
+                .build();
+
+        RedditAPI redditAPI = retrofit.create(RedditAPI.class);
+
+        Call<Feed> call = redditAPI.getFeed();
+
+        call.enqueue(new Callback<Feed>() {
+            @Override
+            public void onResponse(Call<Feed> call, Response<Feed> response) {
+                Log.e(TAG, "onResponse: Server Response: " + response.toString());
+
+                List<Entry> entrys = response.body().getEntrys();
+                for(int i = 0; i < entrys.size(); i++){
+                    Log.d(TAG, "onResponse : entry: " + entrys.get(i).toString() + "\n");
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Feed> call, Throwable t) {
+                Log.e(TAG, "onFailure: Unable to retrieve RSS: " + t.getMessage());
+                Toast.makeText(getActivity(), "An Error Occurred", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return view;
     }

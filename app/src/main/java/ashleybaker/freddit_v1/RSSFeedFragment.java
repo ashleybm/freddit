@@ -159,7 +159,7 @@ public class RSSFeedFragment extends Fragment implements ListView.OnItemClickLis
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Toast.makeText(getActivity(), "You touched " + position, Toast.LENGTH_SHORT).show();
-        Fragment fragment = CommentsFragment.newInstance(posts.get(position).getPostURL());
+        Fragment fragment = CommentsFragment.newInstance(posts.get(position));
         parentActivity.addFragmentToBackStack(fragment);
     }
 }

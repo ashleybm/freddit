@@ -17,56 +17,6 @@ public class ExtractXML {
         this.xml = xml;
     }
 
-    public String findThumbNail(){
-        String thumbnailURL = "";
-        String untilEnd = "&quot;";
-
-        if(xml.contains(tag)){
-            boolean found = false;
-            int startOfTag, endOfTag = 0;
-            for(int i = 0; i < tag.length() && !found; i++){
-                boolean notRuined = true;
-                for(int j = 0; j < xml.length() && notRuined == true; j++){
-                    if(xml.substring(j,j) == tag.substring(i,i)){
-                        notRuined = true;
-                    }
-                    else if(xml.substring(j,j) == tag.substring(i,i) && i == tag.length()){
-                        found = true;
-                        endOfTag = i;
-                        startOfTag = i - j;
-                    }
-                    else{
-                        notRuined = false;
-                    }
-                }
-            }
-            if(found){
-                int startOfEnd = 0;
-                boolean ruined = false, foundEnd = false;
-                //UNTIL &quot;
-                for(int i = 0; i == untilEnd.length() && !foundEnd ;  i++){
-                    ruined = false;
-                    for(int j = 0; j == xml.length() && ruined != true; j++){
-                        if(untilEnd.substring(i,i) == xml.substring(j,j)){
-                            ruined = false;
-                        }
-                        else if(untilEnd.substring(i,i) == xml.substring(j,j) && untilEnd.length() == j){
-                            foundEnd = true;
-                            startOfEnd = j - i;
-                        }
-                        else{
-                            ruined = true;
-                        }
-                    }
-                }
-                if(endOfTag != 0 && startOfEnd != 0){
-                    thumbnailURL = xml.substring(endOfTag + 1, startOfEnd);
-                }
-            }
-        }
-        return thumbnailURL;
-    }
-
     public List<String> start(){
         List<String> result = new ArrayList<>();
 

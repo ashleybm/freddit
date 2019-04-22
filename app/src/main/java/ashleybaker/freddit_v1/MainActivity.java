@@ -1,5 +1,7 @@
 package ashleybaker.freddit_v1;
 
+import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -20,9 +22,19 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
     private Fragment activeFragment;
 
+    private static final String PREF_DARK_THEME = "dark_theme";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
+
+        if(useDarkTheme){
+            setTheme(R.style.AppTheme_Dark_NoActionBar);
+        }
+
         setContentView(R.layout.activity_main);
 
         fragmentManager = getSupportFragmentManager();
@@ -71,6 +83,19 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment = new RSSFeedFragment();
         fragmentManager.beginTransaction().replace(R.id.fragmentHolder, fragment).commit();
         activeFragment = fragment;
+    }
+
+    /**
+     * Switches theme to dark if preference is set. Will restart application
+     * @param darkTheme Use dark theme
+     */
+    public void toggleTheme(boolean darkTheme) {
+        Toast.makeText(this, "App restarting to apply theme", Toast.LENGTH_LONG).show();
+
+        Intent intent = getIntent();
+        finish();
+
+        startActivity(intent);
     }
 
     @Override

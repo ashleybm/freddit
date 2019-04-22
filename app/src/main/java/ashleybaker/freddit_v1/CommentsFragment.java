@@ -75,8 +75,7 @@ public class CommentsFragment extends Fragment {
             postURL = ""; // TODO: Make this a safe default
         }
 
-        listViewComments
-        findViewById(R.id.commentsListView);
+        listViewComments = findViewById(R.id.commentsListView);
 
     }
 
@@ -152,6 +151,7 @@ public class CommentsFragment extends Fragment {
                 }
 
                 listViewComments = (ListView) findViewById(R.id.commentsListView);
+                
             }
 
             @Override
